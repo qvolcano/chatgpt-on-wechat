@@ -3,12 +3,10 @@
 import config
 from channel import channel_factory
 from common.log import logger
-from channel.manager.ActionManager import ActionManager
 
 
 if __name__ == '__main__':
     try:
-        ActionManager.ins
         # load config
         config.load_config()
         # create channel
