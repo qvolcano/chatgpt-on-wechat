@@ -5,8 +5,8 @@ def main(query,context):
     args=query.split()
     code=101280101
     name="广州"
-    if len(args)>1:
-        name=args[1]
+    if len(args)>0:
+        name=args[0]
         for i in codes:
             if i[1]==name or i[2]==name or i[3]==name:
                 code=i[0]
