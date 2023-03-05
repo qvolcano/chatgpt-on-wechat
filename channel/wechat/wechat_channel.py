@@ -59,9 +59,9 @@ class WechatChannel(Channel):
             img_match_prefix = self.check_prefix(content, conf().get('image_create_prefix'))
             if img_match_prefix:
                 content = content.split(img_match_prefix, 1)[1].strip()
-                thread_pool.submit(self._do_send_img, content, from_user_id)
+                thread_pool.submit(self._do_send_img, content, from_user_id, msg)
             else:
-                thread_pool.submit(self._do_send, content, from_user_id)
+                thread_pool.submit(self._do_send, content, from_user_id, msg)
 
         elif to_user_id == other_user_id and match_prefix:
             # 自己给好友发送消息
@@ -71,9 +71,9 @@ class WechatChannel(Channel):
             img_match_prefix = self.check_prefix(content, conf().get('image_create_prefix'))
             if img_match_prefix:
                 content = content.split(img_match_prefix, 1)[1].strip()
-                thread_pool.submit(self._do_send_img, content, to_user_id)
+                thread_pool.submit(self._do_send_img, content, to_user_id, msg)
             else:
-                thread_pool.submit(self._do_send, content, to_user_id)
+                thread_pool.submit(self._do_send, content, to_user_id, msg)
 
 
     def handle_group(self, msg):
@@ -100,7 +100,7 @@ class WechatChannel(Channel):
             img_match_prefix = self.check_prefix(content, conf().get('image_create_prefix'))
             if img_match_prefix:
                 content = content.split(img_match_prefix, 1)[1].strip()
-                thread_pool.submit(self._do_send_img, content, group_id)
+                thread_pool.submit(self._do_send_img, content, group_id, msg)
             else:
                 thread_pool.submit(self._do_send_group, content, msg)
 
@@ -108,24 +108,28 @@ class WechatChannel(Channel):
         logger.info('[WX] sendMsg={}, receiver={}'.format(msg, receiver))
         itchat.send(msg, toUserName=receiver)
 
-    def _do_send(self, query, reply_user_id):
+    def _do_send(self, query, reply_user_id, msg):
         try:
             if not query:
                 return
             context = dict()
             context['from_user_id'] = reply_user_id
+            for i in msg:
+                context[i] = msg[i]
             reply_text = super().build_reply_content(query, context)
             if reply_text:
                 self.send(conf().get("single_chat_reply_prefix") + reply_text, reply_user_id)
         except Exception as e:
             logger.exception(e)
 
-    def _do_send_img(self, query, reply_user_id):
+    def _do_send_img(self, query, reply_user_id, msg):
         try:
             if not query:
                 return
             context = dict()
             context['type'] = 'IMAGE_CREATE'
+            for i in msg:
+                context[i] = msg[i]
             img_url = super().build_reply_content(query, context)
             if not img_url:
                 return
@@ -148,6 +152,8 @@ class WechatChannel(Channel):
             return
         context = dict()
         context['from_user_id'] = msg['ActualUserName']
+        for i in msg:
+            context[i] = msg[i]
         reply_text = super().build_reply_content(query, context)
         if reply_text:
             reply_text = '@' + msg['ActualNickName'] + ' ' + reply_text.strip()
