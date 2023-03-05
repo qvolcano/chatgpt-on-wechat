@@ -6,6 +6,7 @@ def setup():
 def run(name,query,context):
     try:
         action=importlib.import_module("action."+name)
+        importlib.reload(action)
         return action.main(query,context)
     except  Exception as e:
         print(traceback.format_exc())
