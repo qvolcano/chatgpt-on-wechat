@@ -4,7 +4,7 @@ class Bridge(object):
     def __init__(self):
         pass
 
-    def fetch_reply_content(query, context):
+    def fetch_reply_content(self, query, context):
         if query.startswith("/") :
             split=query.find(" ")
             if split>=0 :
