@@ -1,3 +1,6 @@
 import os;
 def main(query,context):
-  return os.system("git pull -q -v");
+  process = os.popen('git pull -q -v') # return file
+  output = process.read()
+  process.close()
+  return output
