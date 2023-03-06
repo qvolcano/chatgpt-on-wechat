@@ -28,15 +28,16 @@ class ChatGPTBot(Bot):
         print(audio_file)
         transcript = openai.Audio.transcribe("whisper-1", audio_file)
         text =transcript.text
+        logger.log(text)
         new_query = Session.build_session_query(text, from_user_id)
-        logger.debug("[OPEN_AI] session query={}".format(new_query))
+        logger.log("[OPEN_AI] session query={}".format(new_query))
 
         # if context.get('stream'):
         #     # reply in stream
         #     return self.reply_text_stream(query, new_query, from_user_id)
 
         reply_content = self.reply_text(new_query, from_user_id, 0)
-        logger.debug("[OPEN_AI] new_query={}, user={}, reply_cont={}".format(new_query, from_user_id, reply_content))
+        logger.log("[OPEN_AI] new_query={}, user={}, reply_cont={}".format(new_query, from_user_id, reply_content))
         if reply_content:
             Session.save_session(text, reply_content, from_user_id)
         return reply_content

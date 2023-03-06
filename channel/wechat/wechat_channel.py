@@ -21,7 +21,7 @@ def handler_single_msg(msg):
     WechatChannel().handle(msg)
     return None
 
-@itchat.msg_register(itchat.content.RECORDING,isFriendChat=True)
+@itchat.msg_register(RECORDING,isFriendChat=True)
 def handler_recording_msg(msg):
     WechatChannel().handle_recording(msg)
     return None
