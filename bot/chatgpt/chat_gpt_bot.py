@@ -20,15 +20,26 @@ class ChatGPTBot(Bot):
         if proxy:
             openai.proxy = proxy
 
-    def reply_sound(self,msg,content=None):
+    def reply_sound(self,msg,context=None):
         msg['Text'](msg['FileName'])
         print(msg['FileName'])
+        from_user_id = context['from_user_id']
         audio_file = open(msg['FileName'], "rb")
         print(audio_file)
         transcript = openai.Audio.transcribe("whisper-1", audio_file)
-        print(transcript)
-        print("------")
-        return transcript
+        text =transcript.text
+        new_query = Session.build_session_query(text, from_user_id)
+        logger.debug("[OPEN_AI] session query={}".format(new_query))
+
+        # if context.get('stream'):
+        #     # reply in stream
+        #     return self.reply_text_stream(query, new_query, from_user_id)
+
+        reply_content = self.reply_text(new_query, from_user_id, 0)
+        logger.debug("[OPEN_AI] new_query={}, user={}, reply_cont={}".format(new_query, from_user_id, reply_content))
+        if reply_content:
+            Session.save_session(text, reply_content, from_user_id)
+        return reply_content
 
     def reply(self, query, context=None):
         # acquire reply content
