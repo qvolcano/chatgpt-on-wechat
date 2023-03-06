@@ -20,6 +20,16 @@ class ChatGPTBot(Bot):
         if proxy:
             openai.proxy = proxy
 
+    def reply_sound(self,msg,content=None):
+        msg['Text'](msg['FileName'])
+        print(msg['FileName'])
+        audio_file = open(msg['FileName'], "rb")
+        print(audio_file)
+        transcript = openai.Audio.transcribe("whisper-1", audio_file)
+        print(transcript)
+        print("------")
+        return transcript
+
     def reply(self, query, context=None):
         # acquire reply content
         if not context or not context.get('type') or context.get('type') == 'TEXT':

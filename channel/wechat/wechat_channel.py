@@ -21,6 +21,10 @@ def handler_single_msg(msg):
     WechatChannel().handle(msg)
     return None
 
+@itchat.msg_register(itchat.content.RECORDING,isFriendChat=True)
+def handler_recording_msg(msg):
+    WechatChannel().handle_recording(msg)
+    return None
 
 @itchat.msg_register(TEXT, isGroupChat=True)
 def handler_group_msg(msg):
@@ -74,7 +78,9 @@ class WechatChannel(Channel):
                 thread_pool.submit(self._do_send_img, content, to_user_id, msg)
             else:
                 thread_pool.submit(self._do_send, content, to_user_id, msg)
-
+    def handle_recording(self,msg):
+        thread_pool.submit(self._do_send_sound, msg)
+        pass
 
     def handle_group(self, msg):
         logger.debug("[WX]receive group msg: " + json.dumps(msg, ensure_ascii=False))
@@ -107,6 +113,10 @@ class WechatChannel(Channel):
     def send(self, msg, receiver):
         logger.info('[WX] sendMsg={}, receiver={}'.format(msg, receiver))
         itchat.send(msg, toUserName=receiver)
+
+    def _do_send_sound(self, msg):
+        super().build_reply_content("", msg)
+        pass
 
     def _do_send(self, query, reply_user_id, msg):
         try:
