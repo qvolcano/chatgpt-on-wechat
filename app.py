@@ -3,7 +3,8 @@
 import config
 from channel import channel_factory
 from common.log import logger
-
+from manager import ServiceManager
+from manager import ActionManager
 
 if __name__ == '__main__':
     try:
@@ -14,6 +15,10 @@ if __name__ == '__main__':
 
         # startup channel
         channel.startup()
+        ServiceManager.add("services.WechatService")
+        ServiceManager.start("services.WechatService")
+        ActionManager.run("_login")
+
     except Exception as e:
         logger.error("App startup failed!")
         logger.exception(e)

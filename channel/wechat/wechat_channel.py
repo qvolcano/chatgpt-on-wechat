@@ -25,6 +25,10 @@ def handler_single_msg(msg):
 def handler_recording_msg(msg):
     WechatChannel().handle_recording(msg)
     return None
+@itchat.msg_register(RECORDING,isFriendChat=True)
+def handler_recording_msg(msg):
+    WechatChannel().handle_recording(msg)
+    return None
 
 @itchat.msg_register(TEXT, isGroupChat=True)
 def handler_group_msg(msg):
@@ -34,8 +38,10 @@ def handler_group_msg(msg):
 
 class WechatChannel(Channel):
     def __init__(self):
+        print("init")
         pass
-
+    def test():
+        pass
     def startup(self):
         # login by scan QRCode
         itchat.auto_login(enableCmdQR=2)
