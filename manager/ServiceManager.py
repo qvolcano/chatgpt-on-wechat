@@ -24,6 +24,11 @@ def stop(name):
             del info['service']
 def _create(name):
     info=services[name]
-    class_path=info['class_path']
-    service=importlib.import_module(class_path)
-    return service
+    class_path="services."+info['class_path']
+    module=importlib.import_module(class_path)
+    if module.default :
+        return module.default
+    return module
+
+def get(name):
+    return services[name]['service']
