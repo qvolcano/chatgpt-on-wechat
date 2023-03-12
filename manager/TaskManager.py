@@ -1,21 +1,26 @@
 import importlib
-
+import threading
 def main():
     pass
 
 tasks={}
 
-class Task:
-    class_path=None
-    def __init__(self,class_path) -> None:
-        self.class_path=class_path
-        pass
-    def start(self):
-        task_execute=importlib.import_module(self.class_path)
-        task_execute.default()
-        pass
-
 def run(class_path):
-    task=Task("tasks."+class_path)
-    task.start()
-    return task
+    class_path="tasks."+class_path
+    if tasks.get(class_path) != None:
+        print("重复任务")
+        return 1
+    try:
+        task=importlib.import_module(class_path)
+        
+        # task=Task("tasks."+class_path)
+        tasks[class_path] =threading.Thread(target=_task,args=(class_path,task))
+        tasks[class_path].start()
+        # task.start()
+        return 0
+    except:
+        return -1
+
+def _task(class_path,task):
+    task.default()
+    del tasks[class_path]

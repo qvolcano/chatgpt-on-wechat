@@ -22,12 +22,23 @@ def stop(name):
         if info['service']:
             del sys.modules['service']
             del info['service']
+
+def status(name):
+    info=services.get(name)
+    if info:
+        if info.get("service")==None:
+            return "stop"
+        else:
+            return "running"
+    else:
+        return "none"
+
 def _create(name):
     info=services[name]
     class_path="services."+info['class_path']
     module=importlib.import_module(class_path)
     if module.default :
-        return module.default
+        return module.default()
     return module
 
 def get(name):

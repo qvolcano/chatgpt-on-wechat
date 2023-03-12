@@ -12,7 +12,7 @@ def setGroupPermission(group,permission):
   groups[group]=permission
   
 def getUserGroup(user):
-  return users[user]
+  return users.get(user)
   
 def getUserPermission(user):
   group=getUserGroup(user)
