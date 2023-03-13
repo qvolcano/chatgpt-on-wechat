@@ -1,7 +1,5 @@
 from manager import PermissionManager
-permission=(
-    "test"
-)
+permission=["test"]
 def default(args):
     PermissionManager.setUserGroup("QV","admin")
     return "test"
