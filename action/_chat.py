@@ -29,7 +29,8 @@ def default(args):
         else:
             user=context.get("User")["NickName"]
             permission=PermissionManager.getUserGroup(user)
-        return ActionManager.run(name,args,userGroup=permission)
+        print(userGroup)
+        return ActionManager.run(name,args,userGroup="admin")
     else:
         return ServiceManager.get("OpenaiService").reply(query, context)
     # ServiceManager.get("OpenaiService").reply()
