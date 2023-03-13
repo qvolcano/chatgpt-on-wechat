@@ -24,9 +24,5 @@ def default(args):
             permission=PermissionManager.getUserGroup(user)
         return ActionManager.run(name,args,permission=permission)
     else:
-        try:
-            test()
-        except  Exception as e:
-            return str(e)
-        return "query="+query+"\n  "+traceback.format_exc()+"\n"+ServiceManager.get("OpenaiService").reply(query, context)
+        return ServiceManager.get("OpenaiService").reply(query, context)
     # ServiceManager.get("OpenaiService").reply()
