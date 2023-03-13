@@ -26,7 +26,7 @@ def default(args):
     else:
         try:
             ass()
-        except e:
+        except:
             return traceback.format_exc()
         return "query="+query+"\n  "+traceback.format_exc()+"\n"+ServiceManager.get("OpenaiService").reply(query, context)
     # ServiceManager.get("OpenaiService").reply()
