@@ -21,6 +21,7 @@ def default(args):
         ##check Permission
         permission=None
         for i in context.get("User")['MemberList']:
+            print(i)
             if context['FromUserName'] == i['UserName']:
                 user=context.get("User")["NickName"]
                 permission=PermissionManager.getUserGroup(user)
