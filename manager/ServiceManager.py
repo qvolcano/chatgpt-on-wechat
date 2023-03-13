@@ -20,7 +20,7 @@ def stop(name):
     info=services[name]
     if info :
         if info['service']:
-            del sys.modules['service']
+            del sys.modules["services."+info['class_path']]
             del info['service']
 
 def status(name):
