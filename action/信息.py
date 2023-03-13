@@ -1,4 +1,4 @@
 import requests
 
 def default(args):
-    return str(len(args['context']['User']))
+    return str(args['context']['User']["MemberList"])
