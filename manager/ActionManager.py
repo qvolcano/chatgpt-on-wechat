@@ -18,10 +18,10 @@ def run(name,args,permission=None,userGroup=None):
             pass
         userGroup=userGroup or "guest"
         if permission!=None :
-            find=false
+            find=False
             for i in permission:
                 if i == userGroup:
-                    find = true
+                    find = Ture
                     break
             if not find:
                 return "没有权限"
