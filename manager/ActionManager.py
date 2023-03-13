@@ -15,13 +15,14 @@ def run(name,args,permission=None,userGroup=None):
         try:
             permission =action.permission
         except:
+            permission= None
             pass
         userGroup=userGroup or "guest"
-        if permission!=None :
+        if permission :
             find=False
             for i in permission:
                 if i == userGroup:
-                    find = Ture
+                    find = True
                     break
             if not find:
                 return "没有权限"
