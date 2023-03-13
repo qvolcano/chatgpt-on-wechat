@@ -19,6 +19,7 @@ def default(args):
         else:
             name=query[1:]
         ##check Permission
+        permission=None
         for i in context.get("User")['MemberList']:
             if context['FromUserName'] == i['UserName']:
                 user=context.get("User")["NickName"]
