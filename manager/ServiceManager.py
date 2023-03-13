@@ -13,13 +13,13 @@ def add(class_path):
 def start(name):
     info=services[name]
     if info :
-        if info['service']==None:
+        if info.get('service')==None:
             info['service']=_create(name)
             info['service'].start()
 def stop(name):
     info=services[name]
     if info :
-        if info['service']:
+        if info.get('service'):
             del sys.modules["services."+info['class_path']]
             del info['service']
 

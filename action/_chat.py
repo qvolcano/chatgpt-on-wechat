@@ -1,6 +1,7 @@
 from manager import ServiceManager
 from manager import ActionManager
 from manager import PermissionManager
+from manager import PrivoderManager
 import traceback
 permission=["admin"]
 
@@ -29,5 +30,9 @@ def default(args):
             permission=PermissionManager.getUserGroup(user)
         return ActionManager.run(name,args,userGroup="admin")
     else:
+        chat_ai=PrivoderManager.get("config").get("chat_ai")
+        if chat_ai == "bing":
+            ServiceManager.start("BingService")
+            return ServiceManager.get("BingService").reply(query, context)
         return ServiceManager.get("OpenaiService").reply(query, context)
     # ServiceManager.get("OpenaiService").reply()
