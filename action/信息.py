@@ -1,5 +1,5 @@
 import requests
-
+from manager import PermissionManager
 def default(args):
     context=args['context']
     if len(context.get("User")['MemberList'])>0:
@@ -7,4 +7,4 @@ def default(args):
             return str(i)
     else:
         user=context.get("User")["NickName"]
-    return str(user)
+    return str(PermissionManager.getUserGroup(user))
