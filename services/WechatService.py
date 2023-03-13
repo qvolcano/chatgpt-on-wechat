@@ -33,7 +33,7 @@ def handler_recording_msg(msg):
 
 @itchat.msg_register(TEXT, isGroupChat=True)
 def handler_group_msg(msg):
-    WechatService.instance().handle(msg)
+    WechatService.instance().handle_group(msg)
     return None
 
 class WechatService():
