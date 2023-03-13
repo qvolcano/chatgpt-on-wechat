@@ -19,9 +19,10 @@ def default(args):
         else:
             name=query[1:]
         ##check Permission
-        if context['FromUserName']==context.get("User")['UserName']:
-            user=context.get("User")["NickName"]
-            permission=PermissionManager.getUserGroup(user)
+        for i in context.get("User")['MemberList']:
+            if context['FromUserName'] == i['UserName']:
+                user=context.get("User")["NickName"]
+                permission=PermissionManager.getUserGroup(user)
         return ActionManager.run(name,args,permission=permission)
     else:
         return ServiceManager.get("OpenaiService").reply(query, context)
