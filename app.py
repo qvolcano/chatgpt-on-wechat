@@ -16,7 +16,7 @@ if __name__ == '__main__':
         # # create channel
         # channel = channel_factory.create_channel("wx")
         config.load_config()
-        PermissionManager.setUserGroup("@bfd13f03812ff78eedce7b173a0f291608c102cd2208180c36b2cf0fd5793f65","admin")
+        PermissionManager.setUserGroup("QV","admin")
         PrivoderManager.set("config",config.config)
         # # startup channel
         # channel.startup()
