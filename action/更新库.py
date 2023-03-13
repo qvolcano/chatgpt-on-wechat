@@ -1,5 +1,5 @@
 import os;
-def default(query,context):
+def default(query):
   process = os.popen('git pull -q -v') # return file
   output = process.read()
   process.close()
