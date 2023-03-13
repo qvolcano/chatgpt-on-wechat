@@ -1,6 +1,7 @@
 import requests
 
-def default(context):
+def default(args):
+    context=args['context']
     if len(context.get("User")['MemberList'])>0:
         for i in context.get("User")['MemberList']:
             return str(i)
