@@ -1,6 +1,7 @@
 from manager import ServiceManager
 from manager import ActionManager
 from manager import PermissionManager
+import traceback
 permission=(
     "admin"
 )
@@ -23,5 +24,5 @@ def default(args):
             permission=PermissionManager.getUserGroup(user)
         return ActionManager.run(name,args,permission=permission)
     else:
-        return "query="+query+"\n  "+ServiceManager.get("OpenaiService").reply(query, context)
+        return "query="+query+"\n  "+traceback.format_exc()+"\n"+ServiceManager.get("OpenaiService").reply(query, context)
     # ServiceManager.get("OpenaiService").reply()
