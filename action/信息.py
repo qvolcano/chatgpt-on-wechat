@@ -7,5 +7,4 @@ def default(args):
             return str(i)
     else:
         user=context.get("User")["NickName"]
-        permission=PermissionManager.getUserGroup(user)
     return str(user)
