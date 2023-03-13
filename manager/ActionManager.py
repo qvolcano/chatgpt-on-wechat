@@ -16,8 +16,15 @@ def run(name,args,permission=None,userGroup=None):
             permission =action.permission
         except:
             pass
-        if permission!=None and permission.index(userGroup) ==-1:
-            return "没有权限"
+        userGroup=userGroup or "guest"
+        if permission!=None :
+            find=false
+            for i in permission:
+                if i == userGroup:
+                    find = true
+                    break
+            if not find:
+                return "没有权限"
         resp = action.default(args)
         del sys.modules[class_path]
         return resp
