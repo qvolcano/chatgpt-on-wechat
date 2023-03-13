@@ -25,8 +25,8 @@ def default(args):
         return ActionManager.run(name,args,permission=permission)
     else:
         try:
-            ass()
-        except:
-            return traceback.format_exc()
+            test()
+        except  Exception as e:
+            return str(e)
         return "query="+query+"\n  "+traceback.format_exc()+"\n"+ServiceManager.get("OpenaiService").reply(query, context)
     # ServiceManager.get("OpenaiService").reply()
