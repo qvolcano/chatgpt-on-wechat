@@ -1,7 +1,6 @@
 from manager import ServiceManager
 def default(args):
-  query=args['query']
-  query.split(" ")
+  query=args['query'].split(" ")
   if ServiceManager.status(query[1]) == "none":
     return "服务"+query[1]+"不存在"
   ServiceManager.stop(query[1])
