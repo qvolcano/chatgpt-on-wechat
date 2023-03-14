@@ -20,6 +20,7 @@ class Service:
     def reply(self, query, context=None):
         async def post():
             resp=await self.bot.ask(prompt=query, conversation_style=ConversationStyle.creative)
+            print(resp)
             message=resp['item']['messages'][1]
             return message['text']
         loop = asyncio.get_event_loop()
