@@ -15,14 +15,14 @@ class Service:
         }])
         self.conversation_style = ConversationStyle.creative
     def stop(self):
-        self.reply()
+        self.bot.close()
         pass
     def reply(self, query, context=None):
         async def post():
             resp=await self.bot.ask(prompt=query, conversation_style=ConversationStyle.creative)
-            print(resp)
-            message=resp['item']['messages'][1]
-            return message['text']
+            return str(resp)
+            #message=resp['item']['messages'][1]
+            #return message['text']
         loop = asyncio.get_event_loop()
         get_future = asyncio.ensure_future(post()) # 相当于开启一个future
         loop.run_until_complete(get_future) # 事件循环
