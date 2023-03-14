@@ -8,45 +8,47 @@ import json
 from itchat.content import *
 from concurrent.futures import ThreadPoolExecutor
 from common.log import logger
+from common.tmp_dir import TmpDir
 from config import conf
 import requests
 import io
 from manager import ActionManager
 
 thread_pool = ThreadPoolExecutor(max_workers=8)
-instance=None
+instance = None
+
 
 @itchat.msg_register(TEXT)
 def handler_single_msg(msg):
     WechatService.instance().handle(msg)
     return None
 
-@itchat.msg_register(RECORDING,isFriendChat=True)
-def handler_recording_msg(msg):
-    WechatService.instance().handle_recordin(msg)
-    return None
-
-@itchat.msg_register(RECORDING,isFriendChat=True)
-def handler_recording_msg(msg):
-    WechatService.instance().handle_recording(msg)
-    return None
 
 @itchat.msg_register(TEXT, isGroupChat=True)
 def handler_group_msg(msg):
     WechatService.instance().handle_group(msg)
     return None
 
+
+@itchat.msg_register(VOICE)
+def handler_single_voice(msg):
+    WechatService.instance().handle_voice(msg)
+    return None
+
+
 class WechatService():
     _instance = None
+
     def instance():
         return WechatService._instance
 
-
     def __init__(self):
-        WechatService._instance=self
+        WechatService._instance = self
         pass
+
     def start(self):
         pass
+
     def login(self):
         itchat.auto_login(enableCmdQR=2)
         itchat.run()
@@ -71,9 +73,9 @@ class WechatService():
             img_match_prefix = self.check_prefix(content, conf().get('image_create_prefix'))
             if img_match_prefix:
                 content = content.split(img_match_prefix, 1)[1].strip()
-                self._do_send_img( content, from_user_id, msg)
+                thread_pool.submit(self._do_send_img, content, from_user_id, msg)
             else:
-                self._do_send( content, from_user_id, msg)
+                thread_pool.submit(self._do_send_text, content, from_user_id, msg)
 
         elif to_user_id == other_user_id and match_prefix:
             # 自己给好友发送消息
@@ -83,19 +85,21 @@ class WechatService():
             img_match_prefix = self.check_prefix(content, conf().get('image_create_prefix'))
             if img_match_prefix:
                 content = content.split(img_match_prefix, 1)[1].strip()
-                self._do_send_img( content, to_user_id, msg)
+                thread_pool.submit(self._do_send_img, content, to_user_id, msg)
             else:
-                self._do_send( content, to_user_id, msg)
-    def handle_recording(self,msg):
-        self._do_send_sound( msg)
+                thread_pool.submit(self._do_send_text, content, to_user_id, msg)
+
+    def handle_voice(self, msg):
+        if conf().get('speech_recognition') != True:
+            return
+        logger.debug("[WX]receive voice msg: " + msg['FileName'])
+        thread_pool.submit(self._do_handle_voice, msg)
         pass
 
     def handle_group(self, msg):
         logger.debug("[WX]receive group msg: " + json.dumps(msg, ensure_ascii=False))
-        group_name = msg['User'].get('NickName', None)
+        group_name = msg['User'].get('NickName', "")
         group_id = msg['User'].get('UserName', None)
-        if not group_name:
-            return ""
         origin_content = msg['Content']
         content = msg['Content']
         content_list = content.split(' ', 1)
@@ -109,24 +113,46 @@ class WechatService():
             return ""
         config = conf()
         match_prefix = (msg['IsAt'] and not config.get("group_at_off", False)) or self.check_prefix(origin_content, config.get('group_chat_prefix')) \
-                       or self.check_contain(origin_content, config.get('group_chat_keyword'))
+            or self.check_contain(origin_content, config.get('group_chat_keyword'))
         if ('ALL_GROUP' in config.get('group_name_white_list') or group_name in config.get('group_name_white_list') or self.check_contain(group_name, config.get('group_name_keyword_white_list'))) and match_prefix:
             img_match_prefix = self.check_prefix(content, conf().get('image_create_prefix'))
             if img_match_prefix:
                 content = content.split(img_match_prefix, 1)[1].strip()
-                self._do_send_img( content, group_id, msg)
+                thread_pool.submit(self._do_send_img, content, group_id, msg)
             else:
-                self._do_send_group( content, msg)
+                thread_pool.submit(self._do_send_group, content, msg)
 
     def send(self, msg, receiver):
         logger.info('[WX] sendMsg={}, receiver={}'.format(msg, receiver))
         itchat.send(msg, toUserName=receiver)
 
-    def _do_send_sound(self, msg):
-        self.build_reply_content("", msg)
-        pass
+    def _do_handle_voice(self, msg):
+        from_user_id = msg['FromUserName']
+        other_user_id = msg['User']['UserName']
+        if from_user_id == other_user_id:
+            file_name = TmpDir().path() + msg['FileName']
+            msg.download(file_name)
+            query = self.build_voice_to_text(file_name)
+            if conf().get('voice_reply_voice'):
+                thread_pool.submit(self._do_send_voice, query, from_user_id)
+            else:
+                thread_pool.submit(self._do_send_text, query, from_user_id)
 
-    def _do_send(self, query, reply_user_id, msg):
+    def _do_send_voice(self, query, reply_user_id):
+        try:
+            if not query:
+                return
+            context = dict()
+            context['from_user_id'] = reply_user_id
+            reply_text = self.build_reply_content(query, context)
+            if reply_text:
+                replyFile = self.build_text_to_voice(reply_text)
+                itchat.send_file(replyFile, toUserName=reply_user_id)
+                logger.info('[WX] sendFile={}, receiver={}'.format(replyFile, reply_user_id))
+        except Exception as e:
+            logger.exception(e)
+
+    def _do_send_text(self, query, reply_user_id, msg):
         try:
             if not query:
                 return
@@ -177,18 +203,23 @@ class WechatService():
             reply_text = '@' + msg['ActualNickName'] + ' ' + reply_text.strip()
             self.send(conf().get("group_chat_reply_prefix", "") + reply_text, msg['User']['UserName'])
 
-    def build_reply_content(self,query, context):
-        return ActionManager.run("_chat",args={
-            "query":query,
-            "context":context
-        },userGroup="admin")
+    def build_reply_content(self, query, context):
+        return ActionManager.run("_chat", args={
+            "query": query,
+            "context": context
+        }, userGroup="admin")
+
+    def build_text_to_voice(self, text):
+        pass
+
+    def build_voice_to_text(self, query):
+        pass
 
     def check_prefix(self, content, prefix_list):
         for prefix in prefix_list:
             if content.startswith(prefix):
                 return prefix
         return None
-
 
     def check_contain(self, content, keyword_list):
         if not keyword_list:
@@ -197,4 +228,6 @@ class WechatService():
             if content.find(ky) != -1:
                 return True
         return None
+
+
 default = WechatService

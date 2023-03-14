@@ -23,6 +23,8 @@ class Service:
             #return str(resp)
             message=resp['item']['messages'][1]
             return message['text']
+        new_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(new_loop)
         loop = asyncio.get_event_loop()
         get_future = asyncio.ensure_future(post()) # 相当于开启一个future
         loop.run_until_complete(get_future) # 事件循环

@@ -1,7 +1,23 @@
+# from concurrent.futures import ThreadPoolExecutor
+# import time
+
+
+# def test(t):
+#     time.sleep(1)
+#     print(t)
+# thread_pool = ThreadPoolExecutor(max_workers=8)
+# thread_pool.submit(test,1)
+# thread_pool.submit(test,2)
+# thread_pool.submit(test,3)
+# thread_pool.submit(test,4)
+# thread_pool.submit(test,5)
+# thread_pool.submit(test,6)
+# thread_pool.submit(test,7)
+
+
 # encoding:utf-8
 
 import config
-from channel import channel_factory
 from common.log import logger
 from manager import ServiceManager
 from manager import ActionManager
@@ -18,8 +34,6 @@ def test():
     return 4
 if __name__ == '__main__':
     try:
-        config.load_config()
-        channel = channel_factory.create_channel("wx")
         config.load_config()
         for i  in config.config.get("admin"):
             PermissionManager.setUserGroup(i,"admin")
