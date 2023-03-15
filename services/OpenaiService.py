@@ -65,9 +65,8 @@ class OpenaiService():
                 presence_penalty=0.0,  # [-2,2]之间，该值越大则更倾向于产生不同的内容
             )
             # logger.info("[ChatGPT] reply={}, total_tokens={}".format(response.choices[0]['message']['content'], response["usage"]["total_tokens"]))
-            return {"total_tokens": response["usage"]["total_tokens"], 
-                    "completion_tokens": response["usage"]["completion_tokens"], 
-                    "content": response.choices[0]['message']['content']}
+            logger.info(response)
+            return string(response)
         except openai.error.RateLimitError as e:
             # rate limit exception
             logger.warn(e)
