@@ -15,7 +15,7 @@ class OpenaiService():
 
     def start(self):
         pass
- def reply(self, query, context=None):
+    def reply(self, query, context=None):
         # acquire reply content
         if not context or not context.get('type') or context.get('type') == 'TEXT':
             logger.info("[OPEN_AI] query={}".format(query))
