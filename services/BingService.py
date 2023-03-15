@@ -14,10 +14,8 @@ class Service:
             "value":self.bing_api_key
         }])
         self.conversation_style = ConversationStyle.creative
-        self.loop = asyncio.get_event_loop()
     def stop(self):
         self.bot.close()
-        self.loop.close()
         pass
     def reply(self, query, context=None):
         result = ""
@@ -27,8 +25,7 @@ class Service:
             message=resp['item']['messages'][1]
             result = message['text']
             return message['text']
-        asyncio.set_event_loop(self.loop)
         get_future = asyncio.ensure_future(post()) # 相当于开启一个future
-        self.loop.run_until_complete(get_future) # 事件循环
+        asyncio.get_event_loop().run_until_complete(get_future) # 事件循环
         return get_future.result()
 default = Service
