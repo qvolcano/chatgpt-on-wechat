@@ -1,0 +1,24 @@
+2023-03-16 00:50:48.397 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 00:50:54.553 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 00:50:58.867 WeChatType.py[43] SplitMessage -> 2023-03-16 00:51:25.956 WeChatType.py[43] SplitMessage -> 
+[WinError -2147221008] 尚未调用 CoInitialize。
+Can not load UIAutomationCore.dll.
+1, You may need to install Windows Update KB971513 if your OS is Windows XP, see https://github.com/yinkaisheng/WindowsUpdateKB971513ForIUIAutomation
+2, you need to use an UIAutomationInitializerInThread object if use uiautomation in a thread, see demos/uiautomation_in_thread.py
+
+[WinError -2147221008] 尚未调用 CoInitialize。
+Can not load UIAutomationCore.dll.
+1, You may need to install Windows Update KB971513 if your OS is Windows XP, see https://github.com/yinkaisheng/WindowsUpdateKB971513ForIUIAutomation
+2, you need to use an UIAutomationInitializerInThread object if use uiautomation in a thread, see demos/uiautomation_in_thread.py
+
+[WinError -2147221008] 尚未调用 CoInitialize。
+Can not load UIAutomationCore.dll.
+1, You may need to install Windows Update KB971513 if your OS is Windows XP, see https://github.com/yinkaisheng/WindowsUpdateKB971513ForIUIAutomation
+2, you need to use an UIAutomationInitializerInThread object if use uiautomation in a thread, see demos/uiautomation_in_thread.py
+2023-03-16 01:31:34.860 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 01:31:41.708 WeChatType.py[43] SplitMessage -> 2023-03-16 01:36:16.416 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 01:36:36.448 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 01:41:10.149 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 01:43:30.659 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 01:44:48.575 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 01:46:59.152 file.py[44] get_group_list -> 

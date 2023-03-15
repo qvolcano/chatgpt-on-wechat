@@ -41,10 +41,14 @@ if __name__ == '__main__':
         ServiceManager.add("WechatService")
         ServiceManager.add("OpenaiService")
         ServiceManager.add("BingService")
-        ServiceManager.start("WechatService")
+        ServiceManager.add("WechatWinService")
+
+        # ServiceManager.start("WechatService")
         ServiceManager.start("BingService")
         ServiceManager.start("OpenaiService")
-        ServiceManager.get("WechatService").login()
+        ServiceManager.start("WechatWinService")
+
+        # ServiceManager.get("WechatService").login()
     except Exception as e:
         logger.error("App startup failed!")
         logger.exception(e)
@@ -61,3 +65,12 @@ if __name__ == '__main__':
 #     get_future = asyncio.ensure_future(get_html("http://www.imooc.com")) # 相当于开启一个future
 #     loop.run_until_complete(get_future) # 事件循环
 #     print(get_future.result()) # 获取结果
+
+# import asyncio
+# async def test(s):
+#     print(s)
+#     return 2
+
+# async def test2():
+#     await asyncio.coroutine(test)(4)
+# asyncio.run(test2())
