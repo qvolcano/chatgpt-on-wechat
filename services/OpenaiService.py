@@ -12,6 +12,11 @@ user_session = dict()
 class OpenaiService():
     def __init__(self):
         openai.api_key = PrivoderManager.get("config").get('open_ai_api_key')
+        if conf().get('open_ai_api_base'):
+            openai.api_base =  PrivoderManager.get("config").get('open_ai_api_base')
+        proxy = PrivoderManager.get("config").get('proxy')
+        if proxy:
+            openai.proxy = proxy
 
     def start(self):
         pass
@@ -114,77 +119,68 @@ class OpenaiService():
             logger.exception(e)
             return None
 
-
 class Session(object):
     @staticmethod
-    def build_session_query(query, user_id):
+    def build_session_query(query, session_id):
         '''
         build query with conversation history
-        e.g.  Q: xxx
-              A: xxx
-              Q: xxx
+        e.g.  [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Who won the world series in 2020?"},
+            {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
+            {"role": "user", "content": "Where was it played?"}
+        ]
         :param query: query content
-        :param user_id: from user id
+        :param session_id: session id
         :return: query content with conversaction
         '''
-        prompt = conf().get("character_desc", "")
-        if prompt:
-            prompt += "<|endoftext|>\n\n\n"
-        session = user_session.get(user_id, None)
-        if session:
-            for conversation in session:
-                prompt += "Q: " + conversation["question"] + "\n\n\nA: " + conversation["answer"] + "<|endoftext|>\n"
-            prompt += "Q: " + query + "\nA: "
-            return prompt
-        else:
-            return prompt + "Q: " + query + "\nA: "
+        session = all_sessions.get(session_id, [])
+        if len(session) == 0:
+            system_prompt = conf().get("character_desc", "")
+            system_item = {'role': 'system', 'content': system_prompt}
+            session.append(system_item)
+            all_sessions[session_id] = session
+        user_item = {'role': 'user', 'content': query}
+        session.append(user_item)
+        return session
 
     @staticmethod
-    def save_session(query, answer, user_id):
+    def save_session(answer, session_id, total_tokens):
         max_tokens = conf().get("conversation_max_tokens")
         if not max_tokens:
             # default 3000
             max_tokens = 1000
-        conversation = dict()
-        conversation["question"] = query
-        conversation["answer"] = answer
-        session = user_session.get(user_id)
-        logger.debug(conversation)
-        logger.debug(session)
+        max_tokens=int(max_tokens)
+
+        session = all_sessions.get(session_id)
         if session:
             # append conversation
-            session.append(conversation)
-        else:
-            # create session
-            queue = list()
-            queue.append(conversation)
-            user_session[user_id] = queue
+            gpt_item = {'role': 'assistant', 'content': answer}
+            session.append(gpt_item)
 
         # discard exceed limit conversation
-        Session.discard_exceed_conversation(user_session[user_id], max_tokens)
-
-
-    @staticmethod
-    def discard_exceed_conversation(session, max_tokens):
-        count = 0
-        count_list = list()
-        for i in range(len(session)-1, -1, -1):
-            # count tokens of conversation list
-            history_conv = session[i]
-            count += len(history_conv["question"]) + len(history_conv["answer"])
-            count_list.append(count)
-
-        for c in count_list:
-            if c > max_tokens:
-                # pop first conversation
-                session.pop(0)
+        Session.discard_exceed_conversation(session, max_tokens, total_tokens)
+    
 
     @staticmethod
-    def clear_session(user_id):
-        user_session[user_id] = []
+    def discard_exceed_conversation(session, max_tokens, total_tokens):
+        dec_tokens = int(total_tokens)
+        # logger.info("prompt tokens used={},max_tokens={}".format(used_tokens,max_tokens))
+        while dec_tokens > max_tokens:
+            # pop first conversation
+            if len(session) > 3:
+                session.pop(1)
+                session.pop(1)
+            else:
+                break    
+            dec_tokens = dec_tokens - max_tokens
+
+    @staticmethod
+    def clear_session(session_id):
+        all_sessions[session_id] = []
 
     @staticmethod
     def clear_all_session():
-        user_session.clear()
+        all_sessions.clear()
 
 default = OpenaiService
