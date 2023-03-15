@@ -23,6 +23,7 @@ class Service:
             #return str(resp)
             message=resp['item']['messages'][1]
             return message['text']
+        new_loop = None
         try:
             new_loop = asyncio.get_event_loop()
         except:
