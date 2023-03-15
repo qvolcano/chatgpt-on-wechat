@@ -15,31 +15,38 @@ class OpenaiService():
 
     def start(self):
         pass
-    def reply(self, query, context=None):
+ def reply(self, query, context=None):
         # acquire reply content
         if not context or not context.get('type') or context.get('type') == 'TEXT':
             logger.info("[OPEN_AI] query={}".format(query))
-            from_user_id = context['from_user_id']
+            session_id = context.get('session_id') or context.get('from_user_id')
             if query == '#清除记忆':
-                Session.clear_session(from_user_id)
+                Session.clear_session(session_id)
                 return '记忆已清除'
             elif query == '#清除所有':
                 Session.clear_all_session()
                 return '所有人记忆已清除'
+            elif query == '#更新配置':
+                load_config()
+                return '配置已更新'
 
-            new_query = Session.build_session_query(query, from_user_id)
-            logger.debug("[OPEN_AI] session query={}".format(new_query))
+            session = Session.build_session_query(query, session_id)
+            logger.debug("[OPEN_AI] session query={}".format(session))
 
-            reply_content = self.reply_text(new_query, from_user_id, 0)
-            logger.debug("[OPEN_AI] new_query={}, user={}, reply_cont={}".format(new_query, from_user_id, reply_content))
-            if reply_content and query:
-                Session.save_session(query, reply_content, from_user_id)
-            return reply_content
+            # if context.get('stream'):
+            #     # reply in stream
+            #     return self.reply_text_stream(query, new_query, session_id)
+
+            reply_content = self.reply_text(session, session_id, 0)
+            logger.debug("[OPEN_AI] new_query={}, session_id={}, reply_cont={}".format(session, session_id, reply_content["content"]))
+            if reply_content["completion_tokens"] > 0:
+                Session.save_session(reply_content["content"], session_id, reply_content["total_tokens"])
+            return reply_content["content"]
 
         elif context.get('type', None) == 'IMAGE_CREATE':
             return self.create_img(query, 0)
 
-    def reply_text(self, query, user_id, retry_count=0):
+    def reply_text(self, session, session_id, retry_count=0):
         '''
         call openai's ChatCompletion to get the answer
         :param session: a conversation session
