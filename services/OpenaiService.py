@@ -2,12 +2,16 @@
 
 from config import conf
 from common.log import logger
+from common.expired_dict import ExpiredDict
 import openai
 import time
 from manager import PrivoderManager
 
 user_session = dict()
-
+if PrivoderManager.get("config").get('expires_in_seconds'):
+    all_sessions = ExpiredDict(PrivoderManager.get("config").get('expires_in_seconds'))
+else:
+    all_sessions = dict()
 # OpenAI对话模型API (可用)
 class OpenaiService():
     def __init__(self):
