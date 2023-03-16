@@ -1,16 +1,19 @@
 from PyOfficeRobot.core.WeChatType import *
 from threading import Timer
 from manager import ServiceManager
+from manager import ProviderManager
 import pythoncom
 import time
 class Service():
     chats={}
+    chats_history={}
     sendMessageQueue=[]
     def start(self):
         # 获取当前微信客户端
         self.wx = WeChat()
         self.timer = Timer(1,self.tick)
         self.timer.start()
+        self.chats_history = ProviderManager.get("wechat_history")
     def stop(self):
         self.timer.cancel()
 
