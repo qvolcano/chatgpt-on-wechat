@@ -1,9 +1,11 @@
 from PyOfficeRobot.core.WeChatType import *
 from threading import Timer
+from manager import ServiceManager
 import pythoncom
 import time
 class Service():
     chats={}
+    sendMessageQueue=[]
     def start(self):
         # 获取当前微信客户端
         self.wx = WeChat()
@@ -27,7 +29,28 @@ class Service():
             messages=self.wx.GetAllMessage
             newest=self.chats[i].getNewMessages(messages)
             self.chats[i].lastChatTime=messages[-1]
+            for i in newest:
+                info = self.parseMessage(i)
+                ServiceManager.get("Action").run("_chat_handler",{'query'=info['content'],'context':info]})
+        sendMessageQueue=self.sendMessageQueue.copy()
+        for i in sendMessageQueue:
+            target = i['target']
+            self.wx.ChatWith(target)
+            self.wx.sendMessage(i['content'])
+        self.sendMessageQueue.clear()
         self.timer.start()
+     def sendMessage(self,content):
+        self.sendMessageQueue.append(content)
+        pass
+     def parseMessage(self,content):
+        info = {}
+        if content.startWish("@") :
+            split = content.index(" ")
+            info['target']=content[1:split]
+            info['content]=content[split:]
+        else:
+            info['content']=content
+        return info
 
 class Chat():
     lastChatTime=0
