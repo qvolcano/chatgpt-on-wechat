@@ -10,7 +10,7 @@ def reload():
 
 def create_action(name):
     class_path="action."+name
-    if cache[class_path] == None:
+    if cache.get(class_path) == None:
         mod=importlib.import_module(class_path)
         try:
             cache[class_path]=mod

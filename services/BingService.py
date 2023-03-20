@@ -5,7 +5,6 @@ import re
 import json
 import os
 class Service:
-    pass
     def start(self):
         self.bing_api_key=PrivoderManager.get("config").get("bing_api_key")
         # self.bot = EdgeChatbot("cookie.json")

@@ -21,4 +21,17 @@ Can not load UIAutomationCore.dll.
 2023-03-16 01:41:10.149 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
 2023-03-16 01:43:30.659 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
 2023-03-16 01:44:48.575 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
-2023-03-16 01:46:59.152 file.py[44] get_group_list -> 
+2023-03-16 01:46:59.152 file.py[44] get_group_list -> 2023-03-16 22:53:26.473 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:30.743 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:33.766 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:34.073 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:36.103 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:36.414 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:43.960 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:44.259 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:46.368 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:46.672 WeChatType.py[43] SplitMessage -> Find Control Timeout(0s): {ControlType: ButtonControl}
+2023-03-16 22:53:48.807 WeChatType.py[43] SplitMessage -> 2023-03-20 22:51:10.683 WeChatType.py[190] roll_to -> Can not move cursor. ListItemControl's BoundingRectangle is (0,0,0,0)[0x0]. SearchProperties: {Name: '狗蛋', ControlType: ListItemControl}
+2023-03-20 22:51:12.815 WeChatType.py[190] roll_to -> Can not move cursor. ListItemControl's BoundingRectangle is (0,0,0,0)[0x0]. SearchProperties: {Name: '狗蛋', ControlType: ListItemControl}
+2023-03-20 22:51:14.958 WeChatType.py[190] roll_to -> Can not move cursor. ListItemControl's BoundingRectangle is (0,0,0,0)[0x0]. SearchProperties: {Name: '狗蛋', ControlType: ListItemControl}
+2023-03-20 22:51:17.046 WeChatType.py[190] roll_to -> 2023-03-20 22:51:39.653 WeChatType.py[190] roll_to -> 2023-03-20 23:04:43.981 WeChatType.py[190] roll_to -> 

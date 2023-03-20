@@ -37,11 +37,14 @@ if __name__ == '__main__':
         config.load_config()
         for i  in config.config.get("admin"):
             PermissionManager.setUserGroup(i,"admin")
+
         PrivoderManager.set("config",config.config)
         ServiceManager.add("WechatService")
         ServiceManager.add("OpenaiService")
+        ServiceManager.add("ChatBotService")
         ServiceManager.add("BingService")
         ServiceManager.add("WechatWinService")
+        ServiceManager.start("ChatBotService")
 
         # ServiceManager.start("WechatService")
         ServiceManager.start("BingService")
@@ -66,11 +69,22 @@ if __name__ == '__main__':
 #     loop.run_until_complete(get_future) # 事件循环
 #     print(get_future.result()) # 获取结果
 
-# import asyncio
-# async def test(s):
-#     print(s)
-#     return 2
+# # import asyncio
+# # async def test(s):
+# #     print(s)
+# #     return 2
 
-# async def test2():
-#     await asyncio.coroutine(test)(4)
-# asyncio.run(test2())
+# # async def test2():
+# #     await asyncio.coroutine(test)(4)
+# # asyncio.run(test2())
+
+
+# # from wcferry import Wcf
+
+# # wcf = Wcf()
+# # wcf.is_login()
+# # wcf
+
+# a = [1,2,3,4,5,6,7,8]
+# for k in ra(10,1):
+#     print(k)
