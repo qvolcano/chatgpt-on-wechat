@@ -91,6 +91,6 @@ class Service():
 
 
     def sendMessage(self,message,reply):
-        pass
+        ServiceManager.get("WechatWinService").send(message, reply)
 
 default = Service
