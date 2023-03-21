@@ -5,7 +5,7 @@ from manager import PrivoderManager
 import traceback
 permission=["admin"]
 
-def default(args):
+def async default(args):
     context=args['context']
     query=args['query']
     if context!=None and context.get('MsgType') == 34 :
@@ -34,5 +34,5 @@ def default(args):
         if chat_ai == "bing":
             ServiceManager.start("BingService")
             return ServiceManager.get("BingService").reply(query, context)
-        return ServiceManager.get("OpenaiService").reply(query, context)
+        return await ServiceManager.get("OpenaiService").reply(query, context)
     # ServiceManager.get("OpenaiService").reply()
