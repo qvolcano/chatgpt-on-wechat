@@ -16,6 +16,6 @@ class Service:
     def stop(self):
         self.bot.close()
         pass
-    def async reply(self, query, context=None):
+    async def reply(self, query, context=None):
         return await self.bot.ask_stream(prompt=query, conversation_style=ConversationStyle.creative)
 default = Service
