@@ -17,7 +17,7 @@ class Service():
         self.lastTickTime=time.time()
         self.wx.MsgList.GetPreviousSiblingControl()
         try:
-            self.user_name=self.wx.UiaAPI.ButtonControl(Name='聊天').GetParentControl().GetChildren()[0].Name
+            self.user_name=self.wx.UiaAPI.ButtonControl(Name="聊天").GetPreviousSiblingControl().Name
         except:
             self.user_name = ""
     def stop(self):
@@ -28,7 +28,7 @@ class Service():
         print("tick")
         self.timer.cancel()
         pythoncom.CoInitialize()
-        sessionlist=["狗蛋"] or PrivoderManager.get("config").get("chat_whitelist") or self.wx.GetSessionList(True)
+        sessionlist=["狗蛋、大姐儿子"] or PrivoderManager.get("config").get("chat_whitelist") or self.wx.GetSessionList(True)
         #check new
         
         for session in sessionlist:
@@ -36,6 +36,7 @@ class Service():
             try:
                 messages=self.wx.GetAllMessage
                 lastMessages=messages[-10:]
+
                 lastMessage=self.wx.GetLastMessage
                 if self.chatsHistory.get(session)==None:
                     self.chatsHistory[session]=messages[-10:]
@@ -43,11 +44,16 @@ class Service():
                     
                     #get news
                     history=self.chatsHistory[session]
-                    session_names=get_ui_by_childs(self.wx.UiaAPI.WindowControl("微信"),[2,1,2,0,0,0,0,0,0,1,0,0,0])
+                    if len(self.wx.UiaAPI.GetChildren())==3:
+                        session_names=get_ui_by_childs(self.wx.UiaAPI,[2,1,2,0,0,0,0,0,0,1,0,0,0]).GetChildren()
 
-                    last_history_chat=history[-1]
-                    history_count = len(history)
-                    new_messages = None
+                    else:
+                        session_names=get_ui_by_childs(self.wx.UiaAPI,[1,1,2,0,0,0,0,0,0,1,0,0,0]).GetChildren()
+                    session_title_name = session_names[0].Name
+                    session_num = session_names[1].Name[2:-1]
+                    is_group_chat=False
+                    if session_num!="":
+                        is_group_chat=True
                     max_seq_index=-1
                     max_seq_nums=0
                     for l in range(len(messages)-1,max(len(messages)-30-1,-1),-1):
@@ -65,7 +71,6 @@ class Service():
                             max_seq_index = l +1
                             break
                     if max_seq_index!=-1:
-                        new_messages=messages[max_seq_index:]
                         for l in range(max_seq_index,len(messages)):
                             message=messages[l]
                             msg={}
@@ -74,8 +79,8 @@ class Service():
                             msg['FromUserName'] = message[0]
                             msg['ToUserName'] = message[0] #check @
                             msg['UserName'] = message[0]
+                            msg['is_group_chat'] = is_group_chat
                             item=self.wx.MsgList.GetChildren()[l]
-                            #是否群聊
                             if len(item.GetChildren()[0].GetChildren())>0:
                                 if item.GetChildren()[0].GetChildren()[0].LocalizedControlType=="按钮":
                                     msg['FromUserName'] = item.GetChildren()[0].GetChildren()[0].Name
@@ -86,16 +91,18 @@ class Service():
                                     msg['FromUserName'] = item.GetChildren()[0].GetChildren()[2].Name
                                     msg["self"]=True
                                 msg["Text"]=message[1] or ""
-                                if msg["Text"].startWish("@"):
-                                    ToUserName=msg['Text'][1:msg['Text'].find("\u2005")]
-                                    if session_names.find("群聊"):
-                                        if ToUserName == self.user_name:
-                                            ServiceManager.get("ChatBotService").handle(msg)
-                                        else:
-                                            pass
+                                if is_group_chat:
+                                    if msg["Text"].startswith("@"):
+                                        ToUserName=msg['Text'][1:msg['Text'].find("\u2005")]
+                                        msg['ToUserName']=ToUserName
+                                        if session_names.find("群聊"):
+                                            if ToUserName == self.user_name:
+                                                ServiceManager.get("ChatBotService").handle(msg)
+                                        # else:
+                                        #     ServiceManager.get("ChatBotService").handle(msg)
                                     else:
-                                        ServiceManager.get("ChatBotService").handle(msg)
-                                        
+                                        if msg['self']==False:
+                                            ServiceManager.get("ChatBotService").handle(msg)
         
                                 # to_user_id = msg['ToUserName']              # 接收人id
                                 # other_user_id = msg['User']['UserName']     # 对手方id

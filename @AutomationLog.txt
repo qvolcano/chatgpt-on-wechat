@@ -49,4 +49,6 @@ Can not load UIAutomationCore.dll.
 2023-03-21 23:22:17.614 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
 2023-03-21 23:22:27.932 <string>[1] <module> -> 2023-03-21 23:24:12.472 WechatWinService.py[18] start -> 2023-03-21 23:24:53.501 WechatWinService.py[18] start -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
 2023-03-21 23:24:58.141 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
-2023-03-21 23:25:08.597 <string>[1] <module> -> 2023-03-21 23:44:11.461 WeChatType.py[43] SplitMessage -> 
+2023-03-21 23:25:08.597 <string>[1] <module> -> 2023-03-21 23:44:11.461 WeChatType.py[43] SplitMessage -> 2023-03-22 00:34:12.422 WechatWinService.py[128] get_ui_by_childs -> 2023-03-22 00:35:11.499 WeChatType.py[190] roll_to -> 2023-03-22 00:35:50.180 WechatWinService.py[127] get_ui_by_childs -> Find Control Timeout(10.0s): {Name: '微信', ControlType: WindowControl}
+2023-03-22 00:36:07.150 WechatWinService.py[127] get_ui_by_childs -> Find Control Timeout(10.0s): {Name: '微信', ControlType: WindowControl}
+2023-03-22 00:36:35.897 <string>[1] <module> -> 
