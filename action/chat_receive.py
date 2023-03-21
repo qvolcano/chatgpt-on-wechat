@@ -1,5 +1,8 @@
-async def defaul(args):
-  query=args.get("text")
+from manager import PrivoderManager
+from manager import ServiceManager
+
+async def default(args):
+  query=args.get("Text")
   context=args
   chat_ai=PrivoderManager.get("config").get("chat_ai")
   if chat_ai == "bing":

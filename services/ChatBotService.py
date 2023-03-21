@@ -34,7 +34,7 @@ class Service():
         self._do_send_text(content, to_user_id, msg)
 
     def build_reply_content(self, query, context):
-        return asyncio.run(ActionManager.run_async("_chat", {"query": query, "context": context}, "system"))
+        return asyncio.run(ActionManager.run_async("chat_receive", context, "system"))
 
     def _do_send_text(self, query, reply_user_id, msg):
         try:
@@ -44,9 +44,10 @@ class Service():
             context['from_user_id'] = reply_user_id
             for i in msg:
                 context[i] = msg[i]
+            session=context['session']
             reply_text = self.build_reply_content(query, context)
             if reply_text:
-                ServiceManager.get("WechatWinService").send(reply_text, reply_user_id)
+                ServiceManager.get("WechatWinService").send(reply_text,session, reply_user_id)
         except Exception as e:
             logger.exception(e)
 

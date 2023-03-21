@@ -34,4 +34,19 @@ Can not load UIAutomationCore.dll.
 2023-03-16 22:53:48.807 WeChatType.py[43] SplitMessage -> 2023-03-20 22:51:10.683 WeChatType.py[190] roll_to -> Can not move cursor. ListItemControl's BoundingRectangle is (0,0,0,0)[0x0]. SearchProperties: {Name: '狗蛋', ControlType: ListItemControl}
 2023-03-20 22:51:12.815 WeChatType.py[190] roll_to -> Can not move cursor. ListItemControl's BoundingRectangle is (0,0,0,0)[0x0]. SearchProperties: {Name: '狗蛋', ControlType: ListItemControl}
 2023-03-20 22:51:14.958 WeChatType.py[190] roll_to -> Can not move cursor. ListItemControl's BoundingRectangle is (0,0,0,0)[0x0]. SearchProperties: {Name: '狗蛋', ControlType: ListItemControl}
-2023-03-20 22:51:17.046 WeChatType.py[190] roll_to -> 2023-03-20 22:51:39.653 WeChatType.py[190] roll_to -> 2023-03-20 23:04:43.981 WeChatType.py[190] roll_to -> 
+2023-03-20 22:51:17.046 WeChatType.py[190] roll_to -> 2023-03-20 22:51:39.653 WeChatType.py[190] roll_to -> 2023-03-20 23:04:43.981 WeChatType.py[190] roll_to -> 2023-03-20 23:59:06.143 WeChatType.py[43] SplitMessage -> 2023-03-21 00:03:59.965 WeChatType.py[190] roll_to -> 2023-03-21 00:05:06.004 WeChatType.py[190] roll_to -> 2023-03-21 23:15:17.756 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:15:28.140 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:15:38.792 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:15:48.961 WechatWinService.py[18] start -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:15:50.672 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:16:00.862 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:16:11.382 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:16:22.030 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:16:43.152 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:16:53.581 <string>[1] <module> -> 2023-03-21 23:17:20.082 WechatWinService.py[18] start -> 2023-03-21 23:17:59.480 WechatWinService.py[18] start -> 2023-03-21 23:18:34.299 WechatWinService.py[18] start -> 2023-03-21 23:20:06.014 WechatWinService.py[18] start -> 2023-03-21 23:20:54.026 WechatWinService.py[18] start -> 2023-03-21 23:21:39.403 WechatWinService.py[18] start -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:21:39.525 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:21:49.643 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:22:17.614 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:22:27.932 <string>[1] <module> -> 2023-03-21 23:24:12.472 WechatWinService.py[18] start -> 2023-03-21 23:24:53.501 WechatWinService.py[18] start -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:24:58.141 <string>[1] <module> -> Find Control Timeout(10s): {Name: '消息', ControlType: ListControl}
+2023-03-21 23:25:08.597 <string>[1] <module> -> 2023-03-21 23:44:11.461 WeChatType.py[43] SplitMessage -> 

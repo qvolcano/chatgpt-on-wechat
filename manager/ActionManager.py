@@ -16,7 +16,7 @@ def create_action(name):
             cache[class_path]=mod
             return mod.default
         except:
-            return None
+            return mod
     return cache[class_path].default
 
 def setup():
@@ -41,7 +41,9 @@ async def run_async(name,args,user=None):
             if not find:
                 raise Exception("没有权限")
         try:
-            return asyncio.coroutine(action)(args)
+            if asyncio.iscoroutinefunction(action):
+                return await action(args)
+            else:
+                return action(args)
         except:
             raise Exception("执行错误")
-    pass

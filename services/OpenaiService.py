@@ -24,7 +24,7 @@ class OpenaiService():
 
     def start(self):
         pass
-    def reply(self, query, context=None):
+    async def reply(self, query, context=None):
         # acquire reply content
         if not context or not context.get('type') or context.get('type') == 'TEXT':
             logger.info("[OPEN_AI] query={}".format(query))
@@ -36,7 +36,6 @@ class OpenaiService():
                 Session.clear_all_session()
                 return '所有人记忆已清除'
             elif query == '#更新配置':
-                load_config()
                 return '配置已更新'
 
             session = Session.build_session_query(query, session_id)
