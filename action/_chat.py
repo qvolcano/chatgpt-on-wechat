@@ -5,7 +5,7 @@ from manager import PrivoderManager
 import traceback
 permission=["admin"]
 
-def async default(args):
+async def default(args):
     context=args['context']
     query=args['query']
     if context!=None and context.get('MsgType') == 34 :
