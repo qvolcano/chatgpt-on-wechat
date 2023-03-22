@@ -28,7 +28,7 @@ class Service():
         print("tick")
         self.timer.cancel()
         pythoncom.CoInitialize()
-        sessionlist=["老婆、狗蛋"] or PrivoderManager.get("config").get("chat_whitelist") or self.wx.GetSessionList(True)
+        sessionlist=["狗蛋"] or PrivoderManager.get("config").get("chat_whitelist") or self.wx.GetSessionList(True)
         #check new
         
         for session in sessionlist:
