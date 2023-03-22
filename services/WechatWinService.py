@@ -75,6 +75,7 @@ class Service():
                             msg['ToUserName'] = message[0] #check @
                             msg['UserName'] = message[0]
                             item=self.wx.MsgList.GetChildren()[l]
+                            #是否群聊
                             if len(item.GetChildren()[0].GetChildren())>0:
                                 if item.GetChildren()[0].GetChildren()[0].LocalizedControlType=="按钮":
                                     msg['FromUserName'] = item.GetChildren()[0].GetChildren()[0].Name
@@ -87,13 +88,20 @@ class Service():
                                 msg["Text"]=message[1] or ""
                                 if msg["Text"].startWish("@"):
                                     ToUserName=msg['Text'][1:msg['Text'].find("\u2005")]
-                                    # if ToUserName == self.user_name:
-
+                                    if session_names.find("群聊"):
+                                        if ToUserName == self.user_name:
+                                            ServiceManager.get("ChatBotService").handle(msg)
+                                        else:
+                                            pass
+                                    else:
+                                        ServiceManager.get("ChatBotService").handle(msg)
+                                        
+        
                                 # to_user_id = msg['ToUserName']              # 接收人id
                                 # other_user_id = msg['User']['UserName']     # 对手方id
                                 # content = msg['Text']
-                                ServiceManager.get("ChatBotService").handle(msg)
-                        # self.chatsHistory[i]=lastMessage[2]
+                                
+                            # self.chatsHistory[i]=lastMessage[2]
                         self.chatsHistory[session]=messages[-10:]
 
                     
