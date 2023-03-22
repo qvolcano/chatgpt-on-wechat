@@ -25,7 +25,7 @@ class Service():
         pass
     def stop(self):
         pass
-    def handle(self, msg):
+    async def handle(self, msg):
         logger.debug("[WX]receive msg: " + json.dumps(msg, ensure_ascii=False))
         from_user_id = msg['FromUserName']
         to_user_id = msg['ToUserName']              # 接收人id
