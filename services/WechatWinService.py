@@ -95,14 +95,13 @@ class Service():
                                     if msg["Text"].startswith("@"):
                                         ToUserName=msg['Text'][1:msg['Text'].find("\u2005")]
                                         msg['ToUserName']=ToUserName
-                                        if session_names.find("群聊"):
-                                            if ToUserName == self.user_name:
-                                                ServiceManager.get("ChatBotService").handle(msg)
+                                        if ToUserName == self.user_name:
+                                            asyncio.run(ServiceManager.get("ChatBotService").handle(msg))
                                         # else:
                                         #     ServiceManager.get("ChatBotService").handle(msg)
                                     else:
                                         if msg['self']==False:
-                                            ServiceManager.get("ChatBotService").handle(msg)
+                                            asyncio.run(ServiceManager.get("ChatBotService").handle(msg))
         
                                 # to_user_id = msg['ToUserName']              # 接收人id
                                 # other_user_id = msg['User']['UserName']     # 对手方id
