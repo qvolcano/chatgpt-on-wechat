@@ -151,7 +151,9 @@ class Service():
                                 else:
                                     if msg['self']==False:
                                         asyncio.run(ServiceManager.get("ChatBotService").handle(msg))
-
+                            else:
+                                #私聊
+                                 asyncio.run(ServiceManager.get("ChatBotService").handle(msg))
                             # to_user_id = msg['ToUserName']              # 接收人id
                             # other_user_id = msg['User']['UserName']     # 对手方id
                             # content = msg['Text']
