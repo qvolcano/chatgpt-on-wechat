@@ -12,7 +12,7 @@ class Service():
         # 获取当前微信客户端
         self.wx = WeChat()
         self.timer = Timer(1,self.tick_time)
-        self.timer.start()
+        
         self.startTime=time.time()
         self.lastTickTime=time.time()
         self.wx.MsgList.GetPreviousSiblingControl()
@@ -22,33 +22,36 @@ class Service():
             self.user_name=self.wx.UiaAPI.ButtonControl(Name="聊天").GetPreviousSiblingControl().Name
         except:
             self.user_name = ""
+        self.timer.start()
             
-    def tick_time():
+    def tick_time(self):
         self.queue_check_session()
         self.queue_update_chat()
         self.queue_send_chat()
         
-    def queue_check_session():
+    def queue_check_session(self):
         pythoncom.CoInitialize()
-        sessions=self.wx.GetSessionList()
+        sessions=self.wx.SessionList.GetChildren()
         for i in sessions:
             has_redot=False
+            if len(i.GetChildren()[0].GetChildren())==3:
+                has_redot=True
             if has_redot:
-                self.session_check_queue.append(i)
-        self.session_check_queue.append(cur_session)
+                self.session_check_queue.append(i.Name)
+        # self.session_check_queue.append(i)
                 
-    def queue_update_chat():
+    def queue_update_chat(self):
         self.session_check_queue=list(set(self.session_check_queue))
         for i in self.session_check_queue:
             self.update_chat2(i)
             
-    def queue_send_chat():
+    def queue_send_chat(self):
         for i in self.queue_sned_chats:
             self.wx.ChatWith(i['session'])
             self.wx.SendMsg(i['content'])
             self.session.check_queue.append(i['session'])
             
-    def update_chat(session):
+    def update_chat(self,session):
         self.wx.ChatWith(session)
         messages=self.wx.GetAllMessage
         if self.chatsHistory.get(session)==None:
@@ -72,7 +75,7 @@ class Service():
                 if seq_nums == len(history):
                     max_seq_index = l +1
                     break
-             if max_seq_index!=-1:
+            if max_seq_index!=-1:
                 self.session_news[session]=[]
         
         
