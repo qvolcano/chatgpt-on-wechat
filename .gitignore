@@ -1,2 +1,8 @@
-.idea/
-venv
+.DS_Store
+.idea
+__pycache__/
+venv*
+*.pyc
+config.json
+QR.png
+nohup.out
