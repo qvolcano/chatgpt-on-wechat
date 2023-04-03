@@ -4,9 +4,7 @@
 """
 wechat channel
 """
-import itchat
 import json
-from itchat.content import *
 from concurrent.futures import ThreadPoolExecutor
 from common.log import logger
 from common.tmp_dir import TmpDir
@@ -14,7 +12,6 @@ from manager import ServiceManager
 from manager import ActionManager
 from manager import PrivoderManager
 import asyncio
-import requests
 import io
 
 permission = ["system"]

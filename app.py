@@ -28,29 +28,31 @@ import time
 # import os
 # import json
 import asyncio
-def test():
+import threading
+def start():
     print(1)
     print(2)
     return 4
 if __name__ == '__main__':
     try:
+        thread_loop = asyncio.new_event_loop()
+        ActionManager.setup(thread_loop)
         config.load_config()
         for i  in config.config.get("admin"):
             PermissionManager.setUserGroup(i,"admin")
 
         PrivoderManager.set("config",config.config)
-        ServiceManager.add("WechatService")
+        # ServiceManager.add("WechatService")
         ServiceManager.add("OpenaiService")
         ServiceManager.add("ChatBotService")
-        ServiceManager.add("BingService")
+        # ServiceManager.add("BingService")
         ServiceManager.add("WechatWinService")
         ServiceManager.start("ChatBotService")
 
         # ServiceManager.start("WechatService")
-        ServiceManager.start("BingService")
         ServiceManager.start("OpenaiService")
         ServiceManager.start("WechatWinService")
-
+        thread_loop.run_forever()
         # ServiceManager.get("WechatService").login()
     except Exception as e:
         logger.error("App startup failed!")
@@ -88,3 +90,15 @@ if __name__ == '__main__':
 # a = [1,2,3,4,5,6,7,8]
 # for k in ra(10,1):
 #     print(k)
+
+# import asyncio
+# import time
+
+# async def test():
+#     time.sleep(1)
+#     print(1)
+# asyncio.ensure_future(test())
+# # run_forever(test())
+# print(2)
+# asyncio.get_event_loop().run_forever()
+# # asyncio.create_task(test())
