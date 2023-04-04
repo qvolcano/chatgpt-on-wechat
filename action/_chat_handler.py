@@ -18,7 +18,7 @@ import io
 permission = ["system"]
 
 async def default( msg):
-    logger.debug("[WX]receive msg: " + json.dumps(msg, ensure_ascii=False))
+    logger.info("[WX]receive msg: " + json.dumps(msg, ensure_ascii=False))
     from_user_id = msg['FromUserName']
     to_user_id = msg['ToUserName']              # 接收人id
     other_user_id = msg['UserName']     # 对手方id
@@ -48,6 +48,7 @@ async def _do_send_text( query, reply_user_id, msg):
         for i in msg:
             context[i] = msg[i]
         session=context['session']
+        logger.info("[WX]received msg: " + query)
         ServiceManager.get("WechatWinService").send("正在查询，请稍后",session, reply_user_id)
         reply_text = await build_reply_content(query, context)
         if reply_text:

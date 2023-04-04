@@ -2,6 +2,8 @@ import importlib
 import traceback
 import sys
 import asyncio
+import threading
+from common.log import logger
 cache={}
 _thread_loop = asyncio.get_event_loop()
 
@@ -25,10 +27,10 @@ def setup(thread_loop):
     _thread_loop=thread_loop
     pass
 def run(name,args,user=None):
-    try:
-        asyncio.run_coroutine_threadsafe(run_async(name,args,user),_thread_loop)
-    except Exception as e:
-        asyncio.run(run_async(name,args,user))
+    logger.info("run1")
+    asyncio.run_coroutine_threadsafe(run_async(name,args,user),_thread_loop)
+    logger.info("run2")
+
 
 async def run_async(name,args,user=None):
     action = create_action(name)
