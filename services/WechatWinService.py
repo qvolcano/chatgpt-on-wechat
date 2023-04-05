@@ -29,8 +29,12 @@ class Service():
         self.wx.MsgList.GetPreviousSiblingControl()
         self.session_check_queue=[]
         self.session_news={}
+        self.wx.UiaAPI.SwitchToThisWindow(waitTime=0)
         try:
             self.user_name=self.wx.UiaAPI.ButtonControl(Name="聊天").GetPreviousSiblingControl().Name
+            EditMsg_BoundingRectangle=self.wx.EditMsg.BoundingRectangle
+            self.wx_EditMsg_x=EditMsg_BoundingRectangle.left+EditMsg_BoundingRectangle.width()*.5
+            self.wx_EditMsg_y=EditMsg_BoundingRectangle.top+EditMsg_BoundingRectangle.height()*.5
         except:
             self.user_name = ""
         for i in self.wx.GetSessionList():
@@ -48,65 +52,57 @@ class Service():
         
     def queue_check_session(self):
         try:
+            self.wx.UiaAPI.SwitchToThisWindow(waitTime=0)
             redots=pyautogui.locateOnWindow("./imgs/picture4.png",confidence=0.9,title="微信")
-            if redots :
-                redots=list(redots)
-                if len(redots):
-                    print(redots)
-                    sessions=self.wx.SessionList.GetChildren()
-                    for i in sessions:
-                        has_redot=False
-                        if len(i.GetChildren()[0].GetChildren())==3:
-                            has_redot=True
-                        if has_redot:
-                            self.session_check_queue.append(i.Name)
-        except:
+            redots=list(redots)
+            if len(redots):
+                logger.info(redots)
+                sessions=self.wx.SessionList.GetChildren()
+                for i in sessions:
+                    if len(i.GetChildren()[0].GetChildren())==3:
+                        self.session_check_queue.append(i.Name)
+        except Exception as e:
             pass
                 
     def queue_update_chat(self):
         self.session_check_queue=list(set(self.session_check_queue))
+        if len(self.session_check_queue):
+            self.wx.UiaAPI.SwitchToThisWindow()
         for i in self.session_check_queue:
-            self.update_chat2(i)
+            self.update_chat(i)
             time.sleep(0.1)
         self.session_check_queue=[]
             
     def queue_send_chat(self):
-        if self.wx.UiaAPI.IsMinimize():
-            self.wx.UiaAPI.SwitchToThisWindow()
+        if len(self.send_message_queue):
+            self.wx.UiaAPI.SwitchToThisWindow(waitTime=0)
         for i in self.send_message_queue:
             try:
-                uia.SendKeys('{Ctrl}a', waitTime=0,)
+                pyautogui.moveTo(self.wx_EditMsg_x,self.wx_EditMsg_y)
+                pyautogui.leftClick()
                 WxUtils.SetClipboard(i['content'])
-                uia.SendKeys('{Ctrl}v', waitTime=0,)
-                pyautogui.press("enter")
+                self.wx.EditMsg.SendKeys('{Ctrl}v',waitTime=0)
+                self.wx.EditMsg.SendKeys('{enter}',waitTime=0)
             except:
               pass
             self.session_check_queue.append(i['session'])
         self.send_message_queue=[]
-
-            
-   
         
     def stop(self):
         self.timer.cancel()
     def send(self,content,session,to_user):
-        logger.info("inster send"+str(len(self.send_message_queue)))
+        logger.info("inster send"+str(len(self.send_message_queue))+" "+content)
         self.send_message_queue.append({'content':content,'session':session,'ToUserName':to_user})
-    def update_chat2(self,session):
+    def update_chat(self,session):
         self.ChatWith(session)
         try:
             messages=self.wx.GetAllMessage
-            lastMessages=messages[-10:]
-
             if self.chatsHistory.get(session)==None:
                 self.chatsHistory[session]=messages[-10:]
             else:
-
-                #get news
                 history=self.chatsHistory[session]
                 if len(self.wx.UiaAPI.GetChildren())==3:
                     session_names=get_ui_by_childs(self.wx.UiaAPI,[2,1,2,0,0,0,0,0,0,1,0,0,0]).GetChildren()
-
                 else:
                     session_names=get_ui_by_childs(self.wx.UiaAPI,[1,1,2,0,0,0,0,0,0,1,0,0,0]).GetChildren()
                 session_title_name = session_names[0].Name
@@ -136,7 +132,6 @@ class Service():
                     for l in range(max_seq_index,len(messages)):
                         message=messages[l]
                         msg={}
-                        self.wx.UiaAPI.WindowControl()
                         msg['session'] = session
                         msg['FromUserName'] = message[0]
                         msg['ToUserName'] = message[0] #check @
@@ -172,30 +167,10 @@ class Service():
             print(e)
 
     def ChatWith(self, who, RollTimes=None):
-        if self.wx.UiaAPI.IsMinimize() :
-            self.wx.UiaAPI.SwitchToThisWindow()
         item=self.wx.SessionList.ListItemControl(Name=who)
-        item.MoveCursorToInnerPos()
-        time.sleep(0.1)
-        item.Click(simulateMove=False,waitTime=0)
-def change_lang(lang):
-    from win32con import WM_INPUTLANGCHANGEREQUEST
-    import win32gui
-    import win32api
+        BoundingRectangle=item.BoundingRectangle
+        pyautogui.leftClick(BoundingRectangle.left+10,BoundingRectangle.top+10)
 
-    hwnd = win32gui.GetForegroundWindow()
-
-    if lang == 'EN':
-        ID = 0x0409
-    # elif lang=='zh-CN':
-    #     ID=0x0804
-    elif lang == 'zh-TW':
-        ID = 0x0404
-    else:
-        print('未知的語言類型')
-        return
-
-    win32api.SendMessage(hwnd, WM_INPUTLANGCHANGEREQUEST, 0, ID)
 
 def get_ui_by_childs(root,childs):
     node=root

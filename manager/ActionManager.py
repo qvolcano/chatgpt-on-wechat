@@ -27,9 +27,7 @@ def setup(thread_loop):
     _thread_loop=thread_loop
     pass
 def run(name,args,user=None):
-    logger.info("run1")
     asyncio.run_coroutine_threadsafe(run_async(name,args,user),_thread_loop)
-    logger.info("run2")
 
 
 async def run_async(name,args,user=None):

@@ -46,7 +46,7 @@ class OpenaiService():
             #     return self.reply_text_stream(query, new_query, session_id)
 
             reply_content = self.reply_text(session, session_id, 0)
-            logger.debug("[OPEN_AI] new_query={}, session_id={}, reply_cont={}".format(session, session_id, reply_content["content"]))
+            logger.info("[OPEN_AI] new_query={}, session_id={}, reply_cont={}".format(session, session_id, reply_content["content"]))
             if reply_content["completion_tokens"] > 0:
                 Session.save_session(reply_content["content"], session_id, reply_content["total_tokens"])
             return reply_content["content"]
